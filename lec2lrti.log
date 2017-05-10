@@ -1,0 +1,259 @@
+----------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  E:\Wits\BiostatisticsII\2017\icu\lec2lrti.log
+  log type:  text
+ opened on:  10 May 2017, 14:44:47
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+. use "lec2lrti.dta" , clear
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         tab ses
+
+        ses |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |          4       50.00       50.00
+          2 |          4       50.00      100.00
+------------+-----------------------------------
+      Total |          8      100.00
+
+.         
+. **define the frequency weights
+.         tab ses [fweight=num]   
+
+        ses |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |         89       13.88       13.88
+          2 |        552       86.12      100.00
+------------+-----------------------------------
+      Total |        641      100.00
+
+.         tab ses creche [fweight=num]  if lrti==0        
+
+           |        creche
+       ses |         0          1 |     Total
+-----------+----------------------+----------
+         1 |        31          5 |        36 
+         2 |       468         57 |       525 
+-----------+----------------------+----------
+     Total |       499         62 |       561 
+
+
+.         tab ses creche [fweight=num]  if lrti==1        
+
+           |        creche
+       ses |         0          1 |     Total
+-----------+----------------------+----------
+         1 |        34         19 |        53 
+         2 |        19          8 |        27 
+-----------+----------------------+----------
+     Total |        53         27 |        80 
+
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         cs lrti creche [fweight=num] ,or        
+
+                 | creche                 |
+                 |   Exposed   Unexposed  |      Total
+-----------------+------------------------+------------
+           Cases |        27          53  |         80
+        Noncases |        62         499  |        561
+-----------------+------------------------+------------
+           Total |        89         552  |        641
+                 |                        |
+            Risk |  .3033708    .0960145  |    .124805
+                 |                        |
+                 |      Point estimate    |    [95% Conf. Interval]
+                 |------------------------+------------------------
+ Risk difference |         .2073563       |    .1087366     .305976 
+      Risk ratio |         3.159635       |    2.105819    4.740815 
+ Attr. frac. ex. |         .6835078       |    .5251253    .7890658 
+ Attr. frac. pop |         .2306839       |
+      Odds ratio |         4.100122       |    2.414443    6.967139 (Cornfield)
+                 +-------------------------------------------------
+                               chi2(1) =    30.17  Pr>chi2 = 0.0000
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         cs lrti creche [fweight=num] , by(ses)  
+
+             ses |       RR       [95% Conf. Interval]   M-H Weight
+-----------------+-------------------------------------------------
+               1 |     1.51348     1.110226   2.063204     9.168539 
+               2 |    3.154656     1.439678   6.912554     2.237319 
+-----------------+-------------------------------------------------
+           Crude |    3.159635     2.105819   4.740815              
+    M-H combined |    1.835406     1.355533   2.485158
+-------------------------------------------------------------------
+Test of homogeneity (M-H)      chi2(1) =    3.319  Pr>chi2 = 0.0685
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         mhodds lrti creche ses [fweight=num]
+
+Mantel-Haenszel estimate of the odds ratio
+Comparing creche==1 vs. creche==0, controlling for ses
+
+    ----------------------------------------------------------------
+     Odds Ratio    chi2(1)        P>chi2        [95% Conf. Interval]
+    ----------------------------------------------------------------
+       3.460834      13.08        0.0003         1.689739   7.088294
+    ----------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         mhodds lrti i.creche i.ses [fweight=num]
+factor variables and time-series operators not allowed
+r(101);
+
+end of do-file
+
+r(101);
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         cs lrti creche [fweight=num] , by(ses)  
+
+             ses |       RR       [95% Conf. Interval]   M-H Weight
+-----------------+-------------------------------------------------
+               1 |     1.51348     1.110226   2.063204     9.168539 
+               2 |    3.154656     1.439678   6.912554     2.237319 
+-----------------+-------------------------------------------------
+           Crude |    3.159635     2.105819   4.740815              
+    M-H combined |    1.835406     1.355533   2.485158
+-------------------------------------------------------------------
+Test of homogeneity (M-H)      chi2(1) =    3.319  Pr>chi2 = 0.0685
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         mhodds lrti creche ses [fweight=num]
+
+Mantel-Haenszel estimate of the odds ratio
+Comparing creche==1 vs. creche==0, controlling for ses
+
+    ----------------------------------------------------------------
+     Odds Ratio    chi2(1)        P>chi2        [95% Conf. Interval]
+    ----------------------------------------------------------------
+       3.460834      13.08        0.0003         1.689739   7.088294
+    ----------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         cs lrti creche [fweight=num] , by(ses) or       
+
+             ses |       OR       [95% Conf. Interval]   M-H Weight
+-----------------+-------------------------------------------------
+               1 |    3.464706     1.186837   10.01174     1.910112 (Cornfield)
+               2 |    3.457064     1.479271    8.10318     1.961957 (Cornfield)
+-----------------+-------------------------------------------------
+           Crude |    4.100122     2.414443   6.967139              
+    M-H combined |    3.460834     1.720534   6.961425
+-------------------------------------------------------------------
+Test of homogeneity (M-H)      chi2(1) =    0.000  Pr>chi2 = 0.9975
+
+                   Test that combined OR = 1:
+                                Mantel-Haenszel chi2(1) =     13.08
+                                                Pr>chi2 =    0.0003
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         cs lrti creche [fweight=num] , by(ses) 
+
+             ses |       RR       [95% Conf. Interval]   M-H Weight
+-----------------+-------------------------------------------------
+               1 |     1.51348     1.110226   2.063204     9.168539 
+               2 |    3.154656     1.439678   6.912554     2.237319 
+-----------------+-------------------------------------------------
+           Crude |    3.159635     2.105819   4.740815              
+    M-H combined |    1.835406     1.355533   2.485158
+-------------------------------------------------------------------
+Test of homogeneity (M-H)      chi2(1) =    3.319  Pr>chi2 = 0.0685
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         cs lrti creche [fweight=num] , by(ses) 
+
+             ses |       RR       [95% Conf. Interval]   M-H Weight
+-----------------+-------------------------------------------------
+               1 |     1.51348     1.110226   2.063204     9.168539 
+               2 |    3.154656     1.439678   6.912554     2.237319 
+-----------------+-------------------------------------------------
+           Crude |    3.159635     2.105819   4.740815              
+    M-H combined |    1.835406     1.355533   2.485158
+-------------------------------------------------------------------
+Test of homogeneity (M-H)      chi2(1) =    3.319  Pr>chi2 = 0.0685
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         cs lrti creche [fweight=num] , by(ses) or       
+
+             ses |       OR       [95% Conf. Interval]   M-H Weight
+-----------------+-------------------------------------------------
+               1 |    3.464706     1.186837   10.01174     1.910112 (Cornfield)
+               2 |    3.457064     1.479271    8.10318     1.961957 (Cornfield)
+-----------------+-------------------------------------------------
+           Crude |    4.100122     2.414443   6.967139              
+    M-H combined |    3.460834     1.720534   6.961425
+-------------------------------------------------------------------
+Test of homogeneity (M-H)      chi2(1) =    0.000  Pr>chi2 = 0.9975
+
+                   Test that combined OR = 1:
+                                Mantel-Haenszel chi2(1) =     13.08
+                                                Pr>chi2 =    0.0003
+
+. 
+end of do-file
+
+. do "C:\Users\kmwai\AppData\Local\Temp\STD0e000000.tmp"
+
+.         cs lrti creche [fweight=num] , by(ses) 
+
+             ses |       RR       [95% Conf. Interval]   M-H Weight
+-----------------+-------------------------------------------------
+               1 |     1.51348     1.110226   2.063204     9.168539 
+               2 |    3.154656     1.439678   6.912554     2.237319 
+-----------------+-------------------------------------------------
+           Crude |    3.159635     2.105819   4.740815              
+    M-H combined |    1.835406     1.355533   2.485158
+-------------------------------------------------------------------
+Test of homogeneity (M-H)      chi2(1) =    3.319  Pr>chi2 = 0.0685
+
+. 
+end of do-file
+
